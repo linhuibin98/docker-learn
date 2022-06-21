@@ -6,7 +6,9 @@ import serverHandler from './server-handler';
 const PORT = 3000;
 
 const server = http.createServer((req, res) => {
-    serverHandler(req, res);
+    serverHandler(req, res, {
+        staticPath: './static'
+    });
 });
 
 server.listen(PORT, () => {

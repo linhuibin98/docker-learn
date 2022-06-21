@@ -6,7 +6,6 @@ import {parse as urlParse} from "node:url";
 
 import mime from 'mime';
 
-const publicPath = join(__dirname, 'static');
 const tryExts = ['.html'];
 
 async function tryFileFormPublic(filePath: string): Promise<string | undefined> {
@@ -35,15 +34,23 @@ async function tryFileFormPublic(filePath: string): Promise<string | undefined> 
     return resFilePath;
 }
 
-async function serverHandler(req: IncomingMessage, res: ServerResponse) {
+export interface Config {
+    cwd: string;
+    staticPath: string;
+}
+
+export type UserConfig = Partial<Config>;
+
+async function serverHandler(req: IncomingMessage, res: ServerResponse, userConfig: UserConfig = {}) {
+    const {staticPath} = resolveConfig(userConfig);
     const url = urlParse(req.url || '');
     // decodeURIComponent 解码 url.pathname
-    const basePath = join(publicPath, decodeURIComponent(url.pathname || '/'));
+    const basePath = join(staticPath, decodeURIComponent(url.pathname || '/'));
     
     let resFilePath = await tryFileFormPublic(basePath);
 
     if (!resFilePath) { // 没有 则跳转到 404
-        resFilePath = join(publicPath, '404.html');
+        resFilePath = join(staticPath, '404.html');
     }
     const stats = await stat(resFilePath);
     // TODO 处理 req header range
@@ -60,6 +67,17 @@ async function serverHandler(req: IncomingMessage, res: ServerResponse) {
     }
     res.writeHead(200, headers);
     return stream.pipe(res);
+}
+
+function resolveConfig(userConfig: UserConfig): Config {
+    const {
+        cwd = process.cwd(),
+        staticPath = '.'
+    } = userConfig;
+    return {
+        cwd,
+        staticPath: join(cwd, staticPath)
+    };
 }
 
 export default serverHandler;

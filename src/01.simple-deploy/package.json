@@ -1,0 +1,17 @@
+{
+  "name": "01.simple-deploy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "esno app.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "16",
+    "mime": "^3.0.0",
+    "esno": "^0.16.3"
+  }
+}

@@ -16,9 +16,5 @@
     "execa": "^6.1.0",
     "minimist": "^1.2.6",
     "terminate": "^2.5.0"
-  },
-  "dependencies": {
-    "@types/node": "16",
-    "mime": "^3.0.0"
   }
 }
