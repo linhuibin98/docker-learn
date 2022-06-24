@@ -1,6 +1,6 @@
 <template>
-    <div class="app">
-        <router-view></router-view>
+    <div class="about">
+        about
     </div>
 </template>
 
@@ -9,5 +9,5 @@
 </script>
 
 <style lang="scss" scoped>
-.app {}
+.about {}
 </style>
